@@ -12,7 +12,9 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash && \
   mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 RUN docker-php-ext-install pdo pdo_mysql
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
+RUN curl -fsSL https://deb.nodesource.com/setup_17.x | \
+apt-get install -y nodejs \
+npm
 
 ADD ./p8 /usr/src/myapp
 
