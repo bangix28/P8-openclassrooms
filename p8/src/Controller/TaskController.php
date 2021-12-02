@@ -24,20 +24,23 @@ class TaskController extends AbstractController
     #[Route('/tasks', name: 'task_list')]
     public function listTask(TaskRepository $taskRepository): Response
     {
-        return $this->render('task/list.html.twig', ['task' => $taskRepository->findAll()]);
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findAll()]);
     }
 
-    #[Route('/tasks_Create', name: 'task_create')]
-    public function createTask(){
+    #[Route('/tasks_create', name: 'task_create')]
+    public function createTask(Request $request){
         $task = new Task();
         $form = $this->createForm(TaskCreateType::class,$task);
-        if ($form->isValid() && !$form->isEmpty()){
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() ){
 
             $task->setUser($this->getUser());
+            $task->setCreatedAt(new \DateTimeImmutable('now'));
+            $task->setIsDone(false);
 
             $this->entityManager->persist($task);
             $this->entityManager->flush();
-
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
             return $this->redirectToRoute('task_list');
 
@@ -53,12 +56,12 @@ class TaskController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() ){
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
-            return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute(' ');
         }
 
         return $this->render('task/edit.html.twig', [
