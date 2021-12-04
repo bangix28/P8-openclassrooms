@@ -49,9 +49,12 @@ class TaskControllerTest extends WebTestCase
             'task_create[content]' => 'content',
         ]);
 
-
+        //And Check the redirect to task_list and check if the add Flash work
         $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
         $this->assertResponseRedirects('/tasks');
+        $crawler_redirect = $client->followRedirect();
+        $this->assertSame(1, $crawler_redirect->filter('div.alert.alert-success')->count());
+
     }
 
     public function testEditTask()
@@ -64,7 +67,7 @@ class TaskControllerTest extends WebTestCase
         $client->loginUser($userRepository->findOneBy(array('email' => 'kenolane@gmail.com')));
 
         //When Get Request at /task_create
-        $crawler = $client->request('GET','/tasks/1/edit');
+        $crawler = $client->request('GET','/tasks/23/edit');
 
         //then my controller have successful response get the form and put data
         $this->assertResponseIsSuccessful();
@@ -77,9 +80,11 @@ class TaskControllerTest extends WebTestCase
             'task_create[content]' => 'content',
         ]);
 
-
+        //And Check the redirect to task_list and check if the add Flash work
         $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
         $this->assertResponseRedirects('/tasks');
+        $crawler_redirect = $client->followRedirect();
+        $this->assertSame(1, $crawler_redirect->filter('div.alert.alert-success')->count());
 
     }
 
