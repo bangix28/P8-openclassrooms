@@ -4,6 +4,8 @@ namespace App\Tests\Controller;
 
 
 use App\DataFixtures\AppFixtures;
+use App\Entity\Task;
+use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -80,12 +82,52 @@ class TaskControllerTest extends WebTestCase
             'task_create[content]' => 'content',
         ]);
 
+
+
         //And Check the redirect to task_list and check if the add Flash work
         $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
         $this->assertResponseRedirects('/tasks');
         $crawler_redirect = $client->followRedirect();
         $this->assertSame(1, $crawler_redirect->filter('div.alert.alert-success')->count());
 
+    }
+
+    public function testToogleAction()
+    {
+        //given Client And tasks not checked
+        $client = $this->createClient();
+
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+
+
+
+        //When POST Request at /tasks/1/toggle
+        $client->request('POST','/tasks/3/toggle');
+
+        //And Call the task who passed in controller for test if the value are true
+        $this->assertSame(true,$taskRepository->findOneBy(array('id' => 3))->getIsDone());
+
+        //And Check the redirect to task_list
+        $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
+        $this->assertResponseRedirects('/tasks');
+
+
+    }
+
+    public function testDeleteTask()
+    {
+        //Given Client
+        $client = $this->createClient();
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+
+        //When POST Request at /tasks/1/delete
+        $client->request('POST', '/tasks/2/delete');
+
+        //And Check the redirect to task_list and check if the add Flash work
+        $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
+        $this->assertResponseRedirects('/tasks');
+        $crawler_redirect = $client->followRedirect();
+        $this->assertSame(1, $crawler_redirect->filter('div.alert.alert-success')->count());
     }
 
 }
