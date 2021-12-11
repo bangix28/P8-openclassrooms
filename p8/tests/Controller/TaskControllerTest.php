@@ -14,7 +14,6 @@ Use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 class TaskControllerTest extends TestCase
 {
 
-
     public function testListTask(){
         //given client
         $client = $this->createClient();
@@ -115,20 +114,28 @@ class TaskControllerTest extends TestCase
 
     }
 
-   /* public function testDeleteTask()
+    public function testDeleteTask()
     {
-        //Given Client
+        //Given Client and login client
         $client = $this->createClient();
         $taskRepository = static::getContainer()->get(TaskRepository::class);
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $client->loginUser($userRepository->findOneBy(array('email' => 'kenolane@gmail.com')));
 
         //When POST Request at /tasks/1/delete
-        $client->request('POST', '/tasks/2/delete');
+        $client->request('POST', '/tasks/1/delete');
+
+        //Check if post are delete
+
+        $test = $taskRepository->findOneBy(array('id' => 1));
+        $this->assertSame(null,$test);
 
         //And Check the redirect to task_list and check if the add Flash work
         $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
         $this->assertResponseRedirects('/tasks');
         $crawler_redirect = $client->followRedirect();
         $this->assertSame(1, $crawler_redirect->filter('div.alert.alert-success')->count());
-    }*/
+    }
+
 
 }
