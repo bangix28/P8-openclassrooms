@@ -25,18 +25,16 @@ class AppFixtures extends Fixture
         $manager->persist($user);
         $manager->flush();
 
-        $anonymous = new User();
+        /*$anonymous = new User();
         $anonymous->setEmail('anonymous@test.com')
             ->setPassword($this->passwordHasher->hashPassword($anonymous,'root'))
             ->setUsername('anonymous');
         $manager->persist($anonymous);
-        $manager->flush();
-
-
+        $manager->flush(); */
 
         $task =  new Task();
         $task->setIsDone(false)
-            ->setCreatedAt(new \DateTimeImmutable('now'))
+            ->setCreatedAt(new \DateTime('now'))
             ->setContent('content')
             ->setTitle('title')
             ->setUser($user);
