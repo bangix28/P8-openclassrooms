@@ -3,12 +3,10 @@
 namespace App\Tests\Controller;
 
 
-use App\DataFixtures\AppFixtures;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use App\Tests\TestCase;
-Use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 
 
 class TaskControllerTest extends TestCase
@@ -105,7 +103,7 @@ class TaskControllerTest extends TestCase
         $client->request('POST','/tasks/1/toggle');
 
         //And Call the task who passed in controller for test if the value are true
-        $this->assertSame(true,$taskRepository->findOneBy(array('id' => 1))->getIsDone());
+        $this->assertTrue($taskRepository->findOneBy(array('id' => 1))->getIsDone());
 
         //And Check the redirect to task_list
         $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
