@@ -36,7 +36,7 @@ class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() ){
 
             $task->setUser($this->getUser());
-            $task->setCreatedAt(new \DateTimeImmutable('now'));
+            $task->setCreatedAt(new \DateTime('now'));
             $task->setIsDone(false);
 
             $this->entityManager->persist($task);
@@ -75,7 +75,7 @@ class TaskController extends AbstractController
 
     public function toggleTaskAction(Task $task)
     {
-        $task->setIsDone(true);
+        $task->setIsDone(!$task->getIsDone());
         $this->entityManager->flush($task);
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
