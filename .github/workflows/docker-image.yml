@@ -22,4 +22,7 @@ jobs:
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        
+      - name: Deploy image
+        run: docker-compose up
 
