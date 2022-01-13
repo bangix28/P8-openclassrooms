@@ -2,18 +2,10 @@
 
 namespace App\Tests\Controller;
 
-use App\Repository\UserRepository;
 use App\Tests\TestCase;
 
 class SecurityControllerTest extends TestCase
 {
-
-    public function loginUser($client)
-    {
-        $userRepository = static::getContainer()->get(UserRepository::class);
-
-        return $client->loginUser($userRepository->findOneBy(array('email' => 'kenolane@gmail.com')));
-    }
 
     public function testLoginAnonymousFail()
     {
@@ -77,20 +69,18 @@ class SecurityControllerTest extends TestCase
         //check if the redirect are good
         $this->assertResponseRedirects('/tasks');
 
-
     }
 
-    public function testLogout(){
+    public function testLogout()
+    {
         //given connected client
         $client = $this->createClient();
         $this->loginUser($client);
         //WHEN user send a logout request
-        $client->request('GET','/logout');
+        $client->request('GET', '/logout');
 
         //check if the redirect are good
         $this->assertResponseRedirects();
-
-
     }
 
 }
