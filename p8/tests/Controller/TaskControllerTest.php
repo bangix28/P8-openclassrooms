@@ -12,12 +12,13 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 class TaskControllerTest extends TestCase
 {
 
-    public function testListTask(){
+    public function testListTask()
+    {
         //given client
         $client = $this->createClient();
 
         //When GET request at /task
-        $client->request('GET','/tasks');
+        $client->request('GET', '/tasks');
 
         //Then my controller return me list of Task
         $this->assertResponseIsSuccessful();
@@ -34,7 +35,7 @@ class TaskControllerTest extends TestCase
 
 
         //When Get Request at /task_create
-        $crawler = $client->request('GET','/tasks_create');
+        $crawler = $client->request('GET', '/tasks_create');
 
         //then my controller have successful response
         $this->assertResponseIsSuccessful();
@@ -42,13 +43,13 @@ class TaskControllerTest extends TestCase
 
         // retrieve the Form object for the form belonging to this button
         $client->submit($form,
-        [
-            'task_create[title]' => 'titre',
-            'task_create[content]' => 'content',
-        ]);
+            [
+                'task_create[title]' => 'titre',
+                'task_create[content]' => 'content',
+            ]);
 
         //And Check the redirect to task_list and check if the add Flash work
-        $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
+        $this->assertResponseStatusCodeSame(302, $client->getResponse()->getStatusCode());
         $this->assertResponseRedirects('/tasks');
         $crawler_redirect = $client->followRedirect();
         $this->assertSame(1, $crawler_redirect->filter('div.alert.alert-success')->count());
@@ -66,7 +67,7 @@ class TaskControllerTest extends TestCase
         $client->loginUser($userRepository->findOneBy(array('email' => 'kenolane@gmail.com')));
 
         //When Get Request at /task_create
-        $crawler = $client->request('GET','/tasks/1/edit');
+        $crawler = $client->request('GET', '/tasks/1/edit');
 
         //then my controller have successful response get the form and put data
         $this->assertResponseIsSuccessful();
@@ -74,15 +75,14 @@ class TaskControllerTest extends TestCase
 
         // retrieve the Form object for the form belonging to this button and send form
         $client->submit($form,
-        [
-            'task_create[title]' => 'titre',
-            'task_create[content]' => 'content',
-        ]);
-
+            [
+                'task_create[title]' => 'titre',
+                'task_create[content]' => 'content',
+            ]);
 
 
         //And Check the redirect to task_list and check if the add Flash work
-        $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
+        $this->assertResponseStatusCodeSame(302, $client->getResponse()->getStatusCode());
         $this->assertResponseRedirects('/tasks');
         $crawler_redirect = $client->followRedirect();
         $this->assertSame(1, $crawler_redirect->filter('div.alert.alert-success')->count());
@@ -98,15 +98,14 @@ class TaskControllerTest extends TestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
 
 
-
         //When POST Request at /tasks/1/toggle
-        $client->request('POST','/tasks/1/toggle');
+        $client->request('POST', '/tasks/1/toggle');
 
         //And Call the task who passed in controller for test if the value are true
         $this->assertTrue($taskRepository->findOneBy(array('id' => 1))->getIsDone());
 
         //And Check the redirect to task_list
-        $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
+        $this->assertResponseStatusCodeSame(302, $client->getResponse()->getStatusCode());
         $this->assertResponseRedirects('/tasks');
 
 
@@ -126,10 +125,10 @@ class TaskControllerTest extends TestCase
         //Check if post are delete
 
         $test = $taskRepository->findOneBy(array('id' => 1));
-        $this->assertSame(null,$test);
+        $this->assertSame(null, $test);
 
         //And Check the redirect to task_list and check if the add Flash work
-        $this->assertResponseStatusCodeSame(302,$client->getResponse()->getStatusCode());
+        $this->assertResponseStatusCodeSame(302, $client->getResponse()->getStatusCode());
         $this->assertResponseRedirects('/tasks');
         $crawler_redirect = $client->followRedirect();
         $this->assertSame(1, $crawler_redirect->filter('div.alert.alert-success')->count());
