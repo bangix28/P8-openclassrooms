@@ -23,8 +23,6 @@ jobs:
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
         
-      - name: Deploy image
-        run: docker-compose up
       - uses: php-actions/composer@v5 # or alternative dependency management
       - uses: php-actions/phpunit@v3
         with:
