@@ -25,4 +25,3 @@ jobs:
         
       - name: Deploy image
         run: docker-compose up
-
