@@ -25,3 +25,8 @@ jobs:
         
       - name: Deploy image
         run: docker-compose up
+      - uses: php-actions/composer@v5 # or alternative dependency management
+      - uses: php-actions/phpunit@v3
+        with:
+          configuration: p8/phpunit.xml
+          memory_limit: 256M
