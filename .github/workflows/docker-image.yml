@@ -22,7 +22,7 @@ jobs:
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
-        
+      - uses: php-actions/composer@v5
       - uses: php-actions/phpunit@v3
         with:
           configuration: p8/phpunit.xml
