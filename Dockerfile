@@ -16,6 +16,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_17.x | \
 apt-get install -y nodejs \
 npm
 
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+
+
 ADD ./p8 /usr/src/myapp
 
 EXPOSE 9000
