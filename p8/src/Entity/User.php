@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +11,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use PHPUnit\Framework\TestCase;
+
 
 
 /**
@@ -156,13 +159,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Task[]
+     * @return Collection|Task[]/**
+     * @codeCoverageIgnore
      */
     public function getTasks(): Collection
     {
         return $this->tasks;
     }
-
+    /**
+     * @codeCoverageIgnore
+     */
     public function addTask(Task $task): self
     {
         if (!$this->tasks->contains($task)) {
@@ -172,7 +178,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
+    /**
+     * @codeCoverageIgnore
+     */
     public function removeTask(Task $task): self
     {
         if ($this->tasks->removeElement($task)) {

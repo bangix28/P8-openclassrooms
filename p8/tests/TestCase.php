@@ -34,7 +34,6 @@ class TestCase extends WebTestCase
         $purger->setPurgeMode(2);
         $purger->purge();
         $em->getConnection()->exec('SET FOREIGN_KEY_CHECKS = 1');
-
     }
 
 }

@@ -1,0 +1,27 @@
+<header class="fixed-top p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <img class="mr-2" src="{{ asset('build/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms"/>
+            <a class="navbar-brand" href="{{ path('task_list') }}">To Do List app</a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                {% if app.user and app.user.roles[0] == 'ROLE_ADMIN' %}
+                    <li><a href="{{ path('app_register') }}" class="nav-link px-2 text-primay">Créer un utilisateur</a></li>
+                    <li><a href="{{ path('user_list') }}" class="nav-link px-2 text-secondary">Liste des utilisateur</a></li>
+                {% endif %}
+            </ul>
+            <div class="col-md-3 text-end">
+            {% if app.user %}
+                        <a href="{{ path('app_logout') }}" class="pull-right nav-link px-2 text-danger text-end">Se déconnecter</a>
+                {% endif %}
+                {% if not app.user and 'app_login' != app.request.attributes.get('_route') %}
+                    <li><a href="{{ path('app_login') }}" class="btn btn-outline-light me-2">Se connecter</a></li>
+                {% endif %}
+            </div>
+
+
+
+            </ul>
+        </div>
+    </div>
+</header>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\UserEditType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,28 +52,19 @@ class UserController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
-    #[Route('/user/edit', name: 'user_edit')]
-    public function EditUser(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    #[Route('/user/edit/{id}', name: 'user_edit')]
+    public function EditUser(Request $request, User $user): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasherInterface->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
             $role = $form->get('roles')->getData();
             $user->setRoles(array($role));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('user_list');
 
         }
 

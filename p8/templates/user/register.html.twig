@@ -1,19 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block header_title %}<h1>Créer un utilisateur</h1>{% endblock %}
+{% block header_title %}<h1 class="text-center mt-3">Créer un utilisateur</h1>{% endblock %}
 {% block header_img %}{% endblock %}
 
 {% block body %}
-    <div class="row">
-
+    <div class="row col-md-6 mx-auto">
         {{ form_start(registrationForm) }}
+        <div class="mb-3">
         {{ form_row(registrationForm.email) }}
+        </div>
+        <div class="mb-3">
         {{ form_row(registrationForm.username) }}
+        </div>
+        <div class="mb-3">
         {{ form_row(registrationForm.roles) }}
+        </div>
+        <div class="mb-3">
         {{ form_row(registrationForm.plainPassword, {
             label: 'Mot de passe'
         }) }}
-        <button type="submit" class="btn">Ajouter</button>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Ajouter</button>
         {{ form_end(registrationForm) }}
     </div>
 {% endblock %}

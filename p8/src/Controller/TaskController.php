@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Entity\User;
 use App\Form\TaskCreateType;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class TaskController extends AbstractController
 {
@@ -28,12 +26,13 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks_create', name: 'task_create')]
-    public function createTask(Request $request){
+    public function createTask(Request $request)
+    {
         $task = new Task();
-        $form = $this->createForm(TaskCreateType::class,$task);
+        $form = $this->createForm(TaskCreateType::class, $task);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() ){
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $task->setUser($this->getUser());
             $task->setCreatedAt(new \DateTime('now'));
@@ -56,7 +55,7 @@ class TaskController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() ){
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
@@ -71,28 +70,33 @@ class TaskController extends AbstractController
     }
 
 
-     #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
-
+    #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
     public function toggleTaskAction(Task $task)
     {
         $task->setIsDone(!$task->getIsDone());
         $this->entityManager->flush($task);
+        if($task->getIsDone() == true) {
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        }else{
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non faite.', $task->getTitle()));
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
-
+        }
         return $this->redirectToRoute('task_list');
     }
 
 
-     #[Route("/tasks/{id}/delete", name: 'task_delete')]
+    #[Route("/tasks/{id}/delete", name: 'task_delete')]
     public function deleteTaskAction(Task $task)
     {
 
-        if ($this->getUser() === $task->getUser() || $this->getUser()->getRoles() === array('ROLE_ADMIN')) {
+        if ($this->getUser() === $task->getUser() || $this->getUser()->getRoles()[0] == 'ROLE_ADMIN') {
             $this->entityManager->remove($task);
             $this->entityManager->flush();
 
             $this->addFlash('success', 'La tâche a bien été supprimée.');
+        }else{
+            $this->addFlash('error', 'Vous ne pouver pas supprimée la tâche !');
+
         }
 
         return $this->redirectToRoute('task_list');

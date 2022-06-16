@@ -4,6 +4,8 @@ services:
   myapp:
     container_name: application
     image: 'p8'
+    environment:
+      XDEBUG_MODE: coverage
     ports:
       - 9000:9000
     volumes:

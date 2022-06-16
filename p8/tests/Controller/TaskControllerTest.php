@@ -12,7 +12,23 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 class TaskControllerTest extends TestCase
 {
 
-    public function testListTask()
+    public function testListTaskUser()
+    {
+        //given client
+        $client = $this->createClient();
+
+        $userRepository = static::getContainer()->get(UserRepository::class);
+
+        $client->loginUser($userRepository->findOneBy(array('email' => 'kenolane@gmail.com')));
+
+        //When GET request at /task
+        $client->request('GET', '/tasks');
+
+        //Then my controller return me list of Task
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testListTaskNotConnected()
     {
         //given client
         $client = $this->createClient();
@@ -21,7 +37,8 @@ class TaskControllerTest extends TestCase
         $client->request('GET', '/tasks');
 
         //Then my controller return me list of Task
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseRedirects('/login');
+
     }
 
     public function testCreateTask()
@@ -93,8 +110,12 @@ class TaskControllerTest extends TestCase
     {
         //given Client And tasks not checked
 
-        $client = $this->createClient();
 
+        $client = $this->createClient();
+        $userRepository = static::getContainer()->get(UserRepository::class);
+
+        $client->loginUser($userRepository->findOneBy(array('email' => 'kenolane@gmail.com')));
+        
         $taskRepository = static::getContainer()->get(TaskRepository::class);
 
 

@@ -1,0 +1,24 @@
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <div class="text-end">
+            {% if task.isDone %}<a href="{{ path('task_toggle',{'id': task.id}) }}"><i class="bi bi-x-circle"></i></a>{% else %}<a href="{{ path('task_toggle',{'id': task.id}) }}"><i class="bi bi-check"></i>
+                </a>{% endif %}
+        </div>
+        <h5 class="card-title"><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h5>
+        <p class="card-text">{{ task.content }}</p>
+        <div class="row">
+            <div class="col-md-8">
+        <form action="{{ path('task_toggle', {'id' : task.id }) }}">
+            <button class="btn btn-success btn-sm pull-right">
+                {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
+            </button>
+        </form>
+            </div>
+            <div class="col-md-4">
+            <form action="{{ path('task_delete', {'id' : task.id }) }}">
+                <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
